@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#25215f">
+<title>Generación Pantalla — Conectados, pero con equilibrio</title>
+<style>
+:root{
+  --navy:#24205f;--purple:#7657c8;--pink:#ef62ad;--lilac:#eee7ff;
+  --cream:#fffaf1;--ink:#20204d;--mint:#ccefe8;--yellow:#ffe58a;
+  --shadow:0 14px 35px rgba(36,32,95,.14);
+}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(135deg,#f7efff 0%,#fffaf1 52%,#fceaf5 100%);
+font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);min-height:100vh}
+button{font:inherit}
+.app{max-width:1050px;margin:auto;padding:20px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:18px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:52px;height:52px;border-radius:18px;background:var(--navy);color:#fff;display:grid;place-items:center;font-size:26px;transform:rotate(-4deg);box-shadow:var(--shadow)}
+.brand h1{font-size:clamp(20px,4vw,30px);margin:0;font-weight:900;letter-spacing:-1px}
+.brand p{margin:2px 0 0;color:#625d82;font-size:13px}
+.pill{background:#fff;border:2px solid #e5dcff;padding:9px 13px;border-radius:999px;font-weight:800;font-size:13px}
+.screen{background:rgba(255,255,255,.86);border:1px solid #eee7ff;border-radius:30px;box-shadow:var(--shadow);overflow:hidden}
+.hero{padding:38px 30px 30px;position:relative}
+.hero:after{content:"";position:absolute;width:150px;height:90px;background:#f5b3dc;border-radius:50% 40% 60% 30%;right:-35px;top:-35px;transform:rotate(-18deg);opacity:.7}
+.kicker{display:inline-block;background:var(--yellow);padding:7px 12px;border-radius:10px;font-weight:900;transform:rotate(-2deg);font-size:13px}
+.hero h2{font-size:clamp(36px,7vw,72px);line-height:.92;margin:16px 0 12px;max-width:760px;letter-spacing:-3px}
+.hero h2 span{color:var(--pink)}
+.hero .lead{font-size:clamp(16px,2.2vw,20px);max-width:720px;line-height:1.45;color:#4c496d}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin:24px 0}
+.info{padding:17px;border-radius:20px;background:var(--lilac);font-weight:800}
+.info:nth-child(2){background:#ffe5f2}.info:nth-child(3){background:#dff5f0}
+.btn{border:0;border-radius:16px;padding:14px 19px;font-weight:900;cursor:pointer;transition:.18s;box-shadow:0 7px 0 rgba(36,32,95,.12)}
+.btn:hover{transform:translateY(-2px)}.btn:active{transform:translateY(2px);box-shadow:0 3px 0 rgba(36,32,95,.12)}
+.primary{background:var(--navy);color:#fff}.secondary{background:#fff;color:var(--navy);border:2px solid #ded6fb;box-shadow:none}
+.center{display:flex;gap:10px;flex-wrap:wrap}
+.hidden{display:none!important}
+.age-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}
+.age{border:3px solid #eee7ff;background:#fff;border-radius:22px;padding:20px 12px;cursor:pointer;text-align:center;font-weight:900;transition:.15s}
+.age:hover,.age.selected{border-color:var(--pink);background:#fff0f8;transform:translateY(-3px)}
+.age .emoji{font-size:35px;display:block;margin-bottom:8px}
+.game{padding:25px}
+.gamebar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.progress{height:10px;background:#eee8ff;border-radius:99px;overflow:hidden;flex:1}.progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--purple),var(--pink));border-radius:99px;width:0;transition:.3s}
+.score{font-weight:900;white-space:nowrap}
+.tag{display:inline-block;background:#f2edff;color:#5b4bb0;padding:7px 10px;border-radius:10px;font-weight:900;font-size:12px}
+.question{font-size:clamp(24px,4.5vw,39px);line-height:1.08;margin:13px 0 20px;letter-spacing:-1px}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.option{background:#fff;border:3px solid #e7e0fb;border-radius:20px;padding:18px;text-align:left;cursor:pointer;font-weight:800;color:var(--ink);min-height:95px;transition:.15s}
+.option:hover{border-color:#a38de8;transform:translateY(-2px)}
+.option.correct{border-color:#3aa98f;background:#e9fbf6}.option.wrong{border-color:#ed6c8f;background:#fff0f4}
+.feedback{margin-top:16px;padding:14px 16px;border-radius:17px;background:#f6f2ff;line-height:1.45;font-weight:650}
+.nextrow{display:flex;justify-content:flex-end;margin-top:14px}
+.result{padding:30px}
+.result-head{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:center}
+.bigscore{background:var(--navy);color:#fff;border-radius:28px;padding:28px;text-align:center}
+.bigscore .num{font-size:70px;font-weight:1000;line-height:1}.bigscore small{opacity:.8}
+.meter{height:18px;background:#eee8ff;border-radius:99px;overflow:hidden;margin:14px 0}.meter i{height:100%;display:block;background:linear-gradient(90deg,#f4a65e,#76c9aa,#7657c8);width:0}
+.result h3{font-size:32px;margin:0 0 8px}.result p{line-height:1.5}
+.advice-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:22px 0}
+.advice{padding:17px;border-radius:19px;background:#fff;border:2px solid #eee7ff}.advice strong{display:block;margin-bottom:6px}
+.share{margin-top:14px}
+footer{text-align:center;color:#77718f;font-size:12px;padding:18px}
+@media(max-width:760px){
+ .app{padding:10px}.hero{padding:28px 20px}.cards{grid-template-columns:1fr}.age-grid{grid-template-columns:1fr 1fr}
+ .options{grid-template-columns:1fr}.result-head{grid-template-columns:1fr}.advice-grid{grid-template-columns:1fr}
+ .game{padding:18px}.top{align-items:flex-start}.pill{display:none}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand"><div class="logo">✦</div><div><h1>Generación Pantalla</h1><p>Conectados, pero con equilibrio</p></div></div>
+    <div class="pill">🎮 Mini desafío · 1–2 min</div>
+  </header>
+
+  <main class="screen">
+    <section id="start" class="hero">
+      <span class="kicker">DESAFÍO RÁPIDO</span>
+      <h2>¿Qué tan <span>consciente</span> es tu relación con la tecnología?</h2>
+      <p class="lead">Toma decisiones, responde situaciones cotidianas y descubre cómo equilibrar pantallas, descanso, estudio, relaciones y vida fuera de internet.</p>
+      <div class="cards">
+        <div class="info">📱 Uso responsable en todas las edades</div>
+        <div class="info">🧠 Bienestar, concentración y emociones</div>
+        <div class="info">⚖️ Tecnología + vida cotidiana</div>
+      </div>
+      <h3>Primero, elige tu etapa</h3>
+      <div class="age-grid">
+        <button class="age" data-age="infancia"><span class="emoji">👧</span>Infancia</button>
+        <button class="age" data-age="adolescencia"><span class="emoji">🧑</span>Adolescencia</button>
+        <button class="age" data-age="adultos"><span class="emoji">🧑‍💼</span>Adultos</button>
+        <button class="age" data-age="mayores"><span class="emoji">👵</span>Adultos mayores</button>
+      </div>
+      <div class="center"><button id="startBtn" class="btn primary" disabled>Empezar juego →</button></div>
+    </section>
+
+    <section id="game" class="game hidden">
+      <div class="gamebar"><div class="progress"><i id="progress"></i></div><div class="score">⭐ <span id="score">0</span> pts</div></div>
+      <span id="category" class="tag"></span>
+      <div id="question" class="question"></div>
+      <div id="options" class="options"></div>
+      <div id="feedback" class="feedback hidden"></div>
+      <div class="nextrow"><button id="nextBtn" class="btn primary hidden">Siguiente →</button></div>
+    </section>
+
+    <section id="result" class="result hidden">
+      <div class="result-head">
+        <div>
+          <span class="kicker">¡DESAFÍO COMPLETADO!</span>
+          <h3 id="resultTitle"></h3>
+          <p id="resultText"></p>
+          <div class="meter"><i id="meter"></i></div>
+          <strong>Tu equilibrio digital: <span id="balance"></span>%</strong>
+        </div>
+        <div class="bigscore"><small>PUNTAJE</small><div class="num" id="finalScore">0</div><small>/ 100</small></div>
+      </div>
+      <div class="advice-grid" id="advice"></div>
+      <div class="center">
+        <button id="again" class="btn primary">🔄 Jugar nuevamente</button>
+        <button id="share" class="btn secondary">📤 Compartir resultado</button>
+        <button id="tips" class="btn secondary">💡 Ver mis consejos</button>
+      </div>
+      <div id="shareMsg" class="share hidden"></div>
+    </section>
+  </main>
+  <footer>Generación Pantalla · Informar · Reflexionar · Actuar</footer>
+</div>
+
+<script>
+const QUESTIONS = [
+ {cat:"⏰ Tiempo frente a pantalla", q:"Tienes una tarde libre. ¿Qué opción muestra más equilibrio?", a:["Pasar toda la tarde conectado porque no hay nada más que hacer.","Combinar un rato de pantalla con movimiento, descanso o una actividad sin dispositivos.","Usar varias pantallas a la vez para aprovechar el tiempo."], ok:1, tip:"Prueba alternar momentos de pantalla con pausas, movimiento y actividades fuera de internet."},
+ {cat:"😴 Antes de dormir", q:"Son las 23:30 y mañana debes levantarte temprano. ¿Qué harías?", a:["Seguir viendo videos hasta tener sueño.","Dejar el dispositivo a un lado y prepararme para dormir.","Revisar redes “solo cinco minutos” y seguir si aparece algo interesante."], ok:1, tip:"Crear un momento sin pantallas antes de dormir puede ayudarte a cuidar tu descanso."},
+ {cat:"📚 Estudio y concentración", q:"Mientras estudias llega una notificación. ¿Cuál es una buena decisión?", a:["Dejar las notificaciones en silencio y revisar el teléfono en un descanso.","Responder inmediatamente para no perderme nada.","Abrir las redes y estudiar al mismo tiempo."], ok:0, tip:"Silenciar notificaciones durante el estudio puede facilitar la concentración."},
+ {cat:"👨‍👩‍👧 Familia y convivencia", q:"Estás conversando con alguien importante para ti y llega un mensaje. ¿Qué haces?", a:["Dejo la conversación para mirar el teléfono.","Miro rápidamente y sigo usando el teléfono mientras habla.","Priorizar la conversación y revisar el mensaje después, si no es urgente."], ok:2, tip:"Los momentos compartidos también necesitan atención. No todo mensaje requiere una respuesta inmediata."},
+ {cat:"🧑‍🤝‍🧑 Relaciones sociales", q:"Un amigo publica algo que te hace sentir mal contigo. ¿Qué opción es más consciente?", a:["Compararme durante horas con esa persona.","Recordar que las redes muestran solo una parte de la vida y tomar distancia si lo necesito.","Comentar algo negativo para sentirme mejor."], ok:1, tip:"Las redes no muestran toda la realidad. Cuida lo que consumes y cómo te hace sentir."},
+ {cat:"📱 Redes sociales", q:"Abres una red social para mirar una cosa y llevas 40 minutos. ¿Qué podrías hacer?", a:["Seguir hasta que aparezca algo aburrido.","Cerrar la aplicación y hacer una pausa o cambiar de actividad.","Abrir otra red para descansar de la primera."], ok:1, tip:"Un límite de tiempo o una pausa consciente puede ayudarte a recuperar el control."},
+ {cat:"🎮 Videojuegos", q:"Estás jugando y ya llevas varias horas. ¿Qué decisión refleja equilibrio?", a:["Seguir aunque tenga sueño o haya dejado otras actividades pendientes.","Hacer una pausa y revisar si ya es momento de descansar, comer, estudiar o dormir.","Jugar otra partida para terminar con una victoria."], ok:1, tip:"Disfrutar de los videojuegos también implica hacer pausas y mantener otras actividades."},
+ {cat:"👶 Primera infancia", q:"Un niño pequeño quiere usar una pantalla durante mucho tiempo. ¿Qué enfoque es más responsable?", a:["Dejarlo usarla sin límites porque así está tranquilo.","Acompañar el uso, elegir contenido adecuado y mantener también juego, movimiento y contacto con otras personas.","Usar la pantalla como única forma de entretención."], ok:1, tip:"En la primera infancia es especialmente importante acompañar el uso y proteger espacios de juego, movimiento y vínculo."},
+ {cat:"🔒 Privacidad y seguridad", q:"Una aplicación te pide datos personales que no necesitas para usarla. ¿Qué haces?", a:["Los entrego para poder entrar más rápido.","Reviso qué información pide, sus permisos y evito compartir datos innecesarios.","Los publico para que otras personas sepan quién soy."], ok:1, tip:"Comparte solo los datos necesarios y revisa permisos, privacidad y seguridad de tus cuentas."},
+ {cat:"🧠 Bienestar emocional", q:"Después de usar una red social te sientes ansioso o agotado. ¿Qué opción es más consciente?", a:["Seguir mirando para distraerme.","Hacer una pausa, identificar cómo me siento y buscar una actividad que me haga bien.","Revisar más contenido para encontrar algo que me alegre."], ok:1, tip:"Tu experiencia emocional también es una señal. Si algo te hace mal, está bien tomar distancia."},
+ {cat:"⚖️ Equilibrio", q:"¿Cuál describe mejor un uso responsable de la tecnología?", a:["Usarla todo lo posible mientras funcione.","Eliminar toda la tecnología de la vida cotidiana.","Usarla como herramienta y entretenimiento sin desplazar descanso, estudio, vínculos y actividades importantes."], ok:2, tip:"La meta no es vivir sin tecnología: es aprender a usarla de manera consciente y equilibrada."},
+ {cat:"🌐 Vida digital", q:"Ves un contenido que parece verdadero, pero no sabes de dónde viene. ¿Qué haces?", a:["Lo comparto porque mucha gente lo publicó.","Reviso la fuente y busco información antes de compartirlo.","Lo comparto y después veo si era cierto."], ok:1, tip:"Antes de compartir, detente: revisa la fuente, la fecha y si la información puede comprobarse."}
+];
+
+let age="", questions=[], index=0, score=0, answered=false, weak=[];
+const $=id=>document.getElementById(id);
+document.querySelectorAll(".age").forEach(b=>b.onclick=()=>{document.querySelectorAll(".age").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");age=b.dataset.age;$("startBtn").disabled=false});
+$("startBtn").onclick=()=>startGame();
+
+function startGame(){
+  index=0;score=0;weak=[];answered=false;
+  questions=[...QUESTIONS].sort(()=>Math.random()-.5).slice(0,8);
+  $("start").classList.add("hidden");$("result").classList.add("hidden");$("game").classList.remove("hidden");render();
+}
+function render(){
+  answered=false;
+  const q=questions[index];
+  $("progress").style.width=(index/questions.length*100)+"%";
+  $("score").textContent=score;
+  $("category").textContent=q.cat;
+  $("question").textContent=q.q;
+  $("feedback").classList.add("hidden");$("nextBtn").classList.add("hidden");
+  $("options").innerHTML="";
+  q.a.forEach((txt,i)=>{
+    const b=document.createElement("button");b.className="option";b.textContent=txt;
+    b.onclick=()=>answer(i,b);$("options").appendChild(b);
+  });
+}
+function answer(choice,btn){
+  if(answered)return;answered=true;
+  const q=questions[index], buttons=[...$("options").children];
+  buttons.forEach((b,i)=>{b.disabled=true;if(i===q.ok)b.classList.add("correct")});
+  if(choice===q.ok){score+=Math.round(100/questions.length);btn.classList.add("correct");$("feedback").textContent="✨ ¡Buena decisión! "+q.tip}
+  else {btn.classList.add("wrong");weak.push(q.cat);$("feedback").textContent="💡 "+q.tip}
+  $("score").textContent=score;$("feedback").classList.remove("hidden");$("nextBtn").textContent=index===questions.length-1?"Ver mi resultado →":"Siguiente →";$("nextBtn").classList.remove("hidden");
+}
+$("nextBtn").onclick=()=>{if(index<questions.length-1){index++;render()}else showResult()};
+
+function showResult(){
+  $("game").classList.add("hidden");$("result").classList.remove("hidden");
+  const s=Math.min(100,score), ageText={infancia:"en la infancia",adolescencia:"en la adolescencia",adultos:"en la adultez",mayores:"en la adultez mayor"}[age]||"en tu etapa";
+  let title,text;
+  if(s>=88){title="🌟 Equilibrio digital en acción";text=`Tienes buenas herramientas para aprovechar la tecnología ${ageText} sin dejar que desplace otras partes importantes de la vida. ¡Sigue tomando decisiones conscientes!`}
+  else if(s>=63){title="💜 Vas por buen camino";text=`Reconoces varias decisiones saludables, pero todavía hay hábitos que puedes ajustar ${ageText}. Pequeños cambios pueden marcar una diferencia.`}
+  else{title="🌱 Momento para revisar algunos hábitos";text=`El desafío mostró varias oportunidades para encontrar más equilibrio ${ageText}. No se trata de dejar la tecnología, sino de aprender a usarla con intención.`}
+  $("resultTitle").textContent=title;$("resultText").textContent=text;$("finalScore").textContent=s;$("balance").textContent=s;$("meter").style.width=s+"%";
+  const tips=[
+   ["⏳ Pausas conscientes","Programa momentos sin pantalla y cambia de actividad de vez en cuando."],
+   ["😴 Protege el descanso","Evita convertir la pantalla en la última actividad antes de dormir."],
+   ["🤝 Cuida tus vínculos","Cuando estés con otras personas, intenta regalarles atención sin interrupciones."],
+   ["🔐 Protege tu información","Revisa permisos y evita compartir datos personales innecesarios."],
+   ["🧠 Escucha cómo te sientes","Si una aplicación o contenido te deja ansioso, triste o agotado, haz una pausa."],
+   ["👶 Si hay niños pequeños","Acompaña el uso de tecnología y conserva espacios para jugar, moverse y relacionarse."]
+  ];
+  $("advice").innerHTML=tips.map(t=>`<div class="advice"><strong>${t[0]}</strong><span>${t[1]}</span></div>`).join("");
+  $("shareMsg").classList.add("hidden");
+}
+$("again").onclick=()=>startGame();
+$("tips").onclick=()=>{$("advice").scrollIntoView({behavior:"smooth",block:"center"})};
+$("share").onclick=async()=>{
+  const text=`Jugué Generación Pantalla 📱⚖️ y obtuve ${score}/100. ¿Te atreves a descubrir tu equilibrio digital?`;
+  try{
+    if(navigator.share) await navigator.share({title:"Generación Pantalla",text});
+    else {await navigator.clipboard.writeText(text);$("shareMsg").textContent="📋 Resultado copiado. ¡Compártelo donde quieras!";$("shareMsg").classList.remove("hidden")}
+  }catch(e){}
+};
+</script>
+</body>
+</html>
